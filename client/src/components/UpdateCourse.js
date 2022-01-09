@@ -4,8 +4,10 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 const UpdateCourse = () => {
+    // Initialize hooks and variables to be kept in state
     let navigate = useNavigate();
     const context = useContext(Context);
+
     const [course, setCourse] = useState([]);
     const [title, setTitle] = useState('');
     const [description, setDesc] = useState('');
@@ -23,8 +25,11 @@ const UpdateCourse = () => {
                 setTime(data.course.estimatedTime);
                 setMaterials(data.course.materialsNeeded);
             })
-            .catch(err => console.log('Error fetching data:', err))
-    }, []);
+            .catch(err => {
+                console.log('Error fetching data:', err);
+                navigate('/notfound');
+            })
+    }, [context.data, id]);
 
     const change = (event) => {
         const value = event.target.value;
@@ -46,14 +51,17 @@ const UpdateCourse = () => {
         }
     }
 
+    // Update course on submit
     const submit = (event) => {
         event.preventDefault();
-        const courseUpdated = {title, description, estimatedTime, materialsNeeded};
+        const courseUpdated = {id, title, description, estimatedTime, materialsNeeded};
 
-        context.data.updateCourse(courseUpdated)
+        context.data.updateCourse(courseUpdated, context.username, context.password)
             .then(errors => {
                 if (errors.length) {
-                setErrors(errors);
+                    setErrors(errors);
+                } else {
+                    navigate('/');
                 }
             })
             .catch((err) => {
@@ -69,6 +77,7 @@ const UpdateCourse = () => {
     
     return (
     <main>
+        {course.userId !== context.authenticatedUser.id? navigate('/forbidden') : null }
         <div className="wrap">
             <h2>Update Course</h2>
                 <ErrorsDisplay errors={errors} />

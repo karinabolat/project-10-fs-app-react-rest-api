@@ -4,17 +4,18 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 const CreateCourse = () => {
+    // Initialize hooks and variables to be kept in state
     let navigate = useNavigate();
     const context = useContext(Context);
+
     const [title, setTitle] = useState('');
     const [description, setDesc] = useState('');
     const [estimatedTime, setTime] = useState('');
     const [materialsNeeded, setMaterials] = useState('');
     const [errors, setErrors] = useState([]);
- 
+
     const change = (event) => {
         const value = event.target.value;
-        console.log(value);
         switch (event.target.name) {
             case "courseTitle":
             setTitle(value);
@@ -38,15 +39,17 @@ const CreateCourse = () => {
         const userId = context.authenticatedUser.id;
         const course = {title, description, estimatedTime, materialsNeeded, userId};
 
-        context.createCourse(course)
+        context.data.createCourse(course, context.username, context.password)
             .then(errors => {
                 if (errors.length) {
-                setErrors(errors);
+                    setErrors(errors);
+                } else {
+                    navigate('/');
                 }
             })
             .catch((err) => {
                 console.log('Something went wrong!', err);
-                // navigate('/error');
+                navigate('/error');
             });
     }
 

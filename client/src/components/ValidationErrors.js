@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Displays validation errors
 export default function ErrorsDisplay({ errors }) {
     let errorsDisplay = null;
   

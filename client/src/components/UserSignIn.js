@@ -4,9 +4,11 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 export default function UserSignIn () {
+    // Initialize hooks and variables to be kept in state
     let navigate = useNavigate();
     let location = useLocation();
     const context = useContext(Context);
+
     const [emailAddress, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [errors, setErrors] = useState([]);
@@ -25,6 +27,7 @@ export default function UserSignIn () {
         }
     }
 
+    // Signin a user on submit
     const submit = (event) => {
         event.preventDefault();
         const { from } = location.state || { from: { pathname: '/' } };
@@ -39,7 +42,7 @@ export default function UserSignIn () {
             })
             .catch((err) => {
                 console.log("Catch error:", err);
-                // navigate('/forbidden');
+                navigate('/error');
             });
     }
 
@@ -66,20 +69,3 @@ export default function UserSignIn () {
         </main>
     );
 }
-
-// function ErrorsDisplay({errors}) {
-//     let errorsDisplay = null;
-  
-//     if (errors.length) {
-//       errorsDisplay = (
-//         <div className="validation--errors">
-//             <h3>Validation Errors</h3>
-//             <ul>
-//                 {errors.map((error, i) => <li key={i}>{error}</li>)}
-//             </ul>
-//         </div>
-//       );
-//     }
-  
-//     return errorsDisplay;
-// }

@@ -5,7 +5,6 @@ import {Context} from '../Context';
 const Header = () => {
   const context = useContext(Context);
   const authUser = context.authenticatedUser;
-  console.log('Header from', authUser);
  
   return (
     <header>

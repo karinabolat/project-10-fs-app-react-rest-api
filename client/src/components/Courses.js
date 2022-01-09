@@ -1,16 +1,21 @@
 import React, {useState, useContext, useEffect} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {Context} from '../Context';
 
 const Courses = () => {
+    // Initialize hooks and variables to be kept in state
     const context = useContext(Context);  
     const [courses, setCourses] = useState([]);
+    let navigate = useNavigate();
 
     useEffect(() => {
         context.data.getCourses()
             .then(data => setCourses(data.courses))
-            .catch(err => console.log('Error fetching data:', err))
-    }, []);
+            .catch(err => {
+                console.log('Error fetching data:', err);
+                navigate('/error');
+            })
+    }, [context.data]);
 
     return (
     <main>

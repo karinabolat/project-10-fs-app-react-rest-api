@@ -19,16 +19,6 @@ import Forbidden from './components/Forbidden';
 import NotFound from './components/NotFound';
 import PrivateRoute from './PrivateRoute';
 
-// CourseDetail and UpdateCourse components to redirect users to the /notfound 
-
-// UpdateCourse component to redirect users to the /forbidden path if the requested course isn't owned by the authenticated user.
-
-// Throughout your application, redirect users to the /error path when requests to the REST API return a "500 Internal Server Error" HTTP status code.
-
-// On the "Course Detail" screen, add rendering logic so that the "Update Course" and "Delete Course" buttons only display if:
-// There's an authenticated user.
-// And the authenticated user's ID matches that of the user who owns the course.
-
 const App = () => {
   return (
     <Router>

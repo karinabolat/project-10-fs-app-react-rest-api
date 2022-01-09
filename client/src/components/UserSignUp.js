@@ -4,6 +4,7 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 export default function UserSignUp () {
+    // Initialize hooks and variables to be kept in state
     let navigate = useNavigate();
     const context = useContext(Context);
     const [firstName, setFirstName] = useState('');
@@ -56,7 +57,7 @@ export default function UserSignUp () {
       })
       .catch((err) => {
         console.log(err);
-        navigate('/notfound');
+        navigate('/error');
       });
   
   }
