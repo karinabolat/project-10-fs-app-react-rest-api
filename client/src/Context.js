@@ -5,29 +5,37 @@ import Data from './Data';
 export const Context = React.createContext(); 
 
 export const Provider = (props) => {
-  const [authenticatedUser, setAuthUser] = useState(null);
-
+  
   const data = new Data();
+  const cookie = Cookies.get('authenticatedUser');
+  const [authenticatedUser, setAuthUser] = useState(cookie? JSON.parse(cookie) : null);
 
   const signIn = async (username, password) => {
     const user = await data.getUser(username, password);
     
     if (user !== null) {
       setAuthUser(user);
+      Cookies.set('authenticatedUser', JSON.stringify(user), {expires: 1});
     }
-
-    console.log('from context!!!', user);
     return user;
   }
 
   const signOut = () => {
     setAuthUser(null);
+    Cookies.remove('authenticatedUser');
+  }
+
+  const createCourse = async (course) => {
+    const username = authenticatedUser.emailAddress;
+    const password = authenticatedUser.password;
+    return await data.postCourse(course, {username, password});
   }
 
   return (
     <Context.Provider value={{
       authenticatedUser,
       data,
+      createCourse,
       actions: {
         signIn,
         signOut

@@ -17,20 +17,7 @@ import UserSignOut from './components/UserSignOut';
 import UnhandledError from './components/UnhandledError';
 import Forbidden from './components/Forbidden';
 import NotFound from './components/NotFound';
-
-// import {withContext, Context} from './Context';
 import PrivateRoute from './PrivateRoute';
-
-// Subscribe components to context
-// const HeaderWithContext = withContext(Header);
-// const UserSignUpWithContext = withContext(UserSignUp);
-// const UserSignInWithContext = withContext(UserSignIn);
-// const UserSignOutWithContext = withContext(UserSignOut);
-
-// Private
-// /courses/create
-// /courses/:id/update
-
 
 // CourseDetail and UpdateCourse components to redirect users to the /notfound 
 

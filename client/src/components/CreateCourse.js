@@ -38,15 +38,15 @@ const CreateCourse = () => {
         const userId = context.authenticatedUser.id;
         const course = {title, description, estimatedTime, materialsNeeded, userId};
 
-        context.data.createCourse(course)
+        context.createCourse(course)
             .then(errors => {
                 if (errors.length) {
                 setErrors(errors);
                 }
             })
             .catch((err) => {
-                console.log(err);
-                navigate('/error');
+                console.log('Something went wrong!', err);
+                // navigate('/error');
             });
     }
 
