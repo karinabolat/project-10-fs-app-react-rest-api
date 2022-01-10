@@ -4,15 +4,18 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 export default function UserSignUp () {
-    // Initialize hooks and variables to be kept in state
+    // Initializes hooks and retrieves data from context
+    const {data, actions} = useContext(Context);
     let navigate = useNavigate();
-    const context = useContext(Context);
+
+    // Variables to be kept in state
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [emailAddress, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [errors, setErrors] = useState([]);
 
+    // Captures user input
     const change = (event) => {
         const value = event.target.value;
         switch (event.target.name) {
@@ -33,6 +36,7 @@ export default function UserSignUp () {
         }
     }
 
+    // Creates a user upon submission
     const submit = (event) => {
         event.preventDefault();
 
@@ -43,24 +47,23 @@ export default function UserSignUp () {
         password,
         };
 
-    context.data.createUser(user)
-      .then( errors => {
-        if (errors.length) {
-          setErrors(errors);
-        } else {
-          context.actions.signIn(user.emailAddress, user.password)
-            .then(() => {
-                navigate('/');
-                console.log('success sign up!')   
-            });
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        navigate('/error');
-      });
-  
-  }
+        data.createUser(user)
+        .then( errors => {
+            if (errors.length) {
+                setErrors(errors);
+            } else {
+                actions.signIn(user.emailAddress, user.password)
+                    .then(() => {
+                        navigate('/'); 
+                    });
+                }
+        })
+        .catch((err) => {
+            // catches all other errors and redirects to 'error' page
+            console.log(err);
+            navigate('/error');
+        });
+    }
 
     const cancel = (event) => {
         event.preventDefault();

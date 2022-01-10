@@ -2,45 +2,48 @@ import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import Data from './Data';
 
+// Creates context
 export const Context = React.createContext(); 
 
 export const Provider = (props) => {
-  
+  // Creates Data instance
   const data = new Data();
-  const cookie = Cookies.get('authenticatedUser');
+
+  // Creates cookies
+  const cookie1 = Cookies.get('authenticatedUser');
+  const cookie2 = Cookies.get('password');
 
   // Variables to be kept in state
-  const [authenticatedUser, setAuthUser] = useState(cookie? JSON.parse(cookie) : null);
-  const [username, setUsername] = useState('');
-  const [password, setPass] = useState('');
+  const [authenticatedUser, setAuthUser] = useState(cookie1? JSON.parse(cookie1) : null);
+  const [password, setPass] = useState(cookie2? JSON.parse(cookie2) : null);
 
-  // Methods
+ 
+  // Signs in a user and sets cookies
   const signIn = async (username, password) => {
-    setUsername(username);
-    setPass(password);
-     
     const user = await data.getUser(username, password);
-    
     if (user !== null) {
       setAuthUser(user);
+      setPass(password);
       Cookies.set('authenticatedUser', JSON.stringify(user), {expires: 1});
+      Cookies.set('password', JSON.stringify(password), {expires: 1});
     }
+    
     return user;
   }
 
+  // Signs out a user and removes cookies
   const signOut = () => {
     setAuthUser(null);
-    setUsername(null);
     setPass(null);
     Cookies.remove('authenticatedUser');
+    Cookies.remove('password');
   }
 
   return (
     <Context.Provider value={{
       authenticatedUser,
-      data,
-      username,
       password,
+      data,
       actions: {
         signIn,
         signOut

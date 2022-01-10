@@ -3,17 +3,16 @@ import { Link } from 'react-router-dom';
 import {Context} from '../Context';
 
 const Header = () => {
-  const context = useContext(Context);
-  const authUser = context.authenticatedUser;
+  const {authenticatedUser} = useContext(Context);
  
   return (
     <header>
         <div className="wrap header--flex">
             <h1 className="header--logo"><Link to="/">Courses</Link></h1>
             <nav>
-              {authUser? (
+              {authenticatedUser? (
                 <ul className="header--signedin">
-                  <li>Welcome, {authUser.firstName}!</li>
+                  <li>Welcome, {authenticatedUser.firstName}!</li>
                   <li><Link to="/signout">Sign Out</Link></li>
                 </ul>
               ) : (

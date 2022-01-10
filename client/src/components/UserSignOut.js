@@ -3,8 +3,9 @@ import { Navigate } from 'react-router-dom';
 import {Context} from '../Context';
 
 const SignOut = () => {
-  const context = useContext(Context);
-  useEffect(() =>  context.actions.signOut());
+  const {actions} = useContext(Context);
+  // Signs out a user
+  useEffect(() =>  actions.signOut());
 
   return (
     <Navigate to="/" />

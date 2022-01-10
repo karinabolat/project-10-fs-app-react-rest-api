@@ -4,29 +4,35 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import {Context} from '../Context';
 
 const CourseDetail = () => {
-    // Initialize hooks and variables to be kept in state
-    const context = useContext(Context);  
+    // Initializes hooks and retrieves data from context
+    const {data, authenticatedUser, password}  = useContext(Context);  
     let navigate = useNavigate();
-    const [course, setCourse] = useState([]);
     const { id } = useParams();
+
+    // Variable to be kept in state
+    const [course, setCourse] = useState([]);
     
-    useEffect(() => {
-        context.data.getACourse(id)
-            .then(data => setCourse(data.course))
-            .catch(err => {
-                console.log('Error fetching data:', err);
-                navigate('/notfound');
+    // Retrieves a course
+    useEffect(() => {       
+        data.getACourse(id)
+            .then(data => {
+                // if no data, redirects to 'notfound' page
+                if (!data) {
+                    navigate('/notfound');
+                } else {
+                    setCourse(data.course);
+                }
             })
-    }, [context.data, id]);
+            .catch(err => {
+                // catches all other errors and redirects to 'error' page
+                console.log('Error fetching data:', err);
+                navigate('/error');
+            })
+    }, [data, id, navigate]);
 
-    // Stores current authenticated user's id
-    let userId;
-    if (context.authenticatedUser) {
-        userId = context.authenticatedUser.id;
-    }
-
+    // Deletes a course
     const deleteCourse = () => {
-        context.data.deleteCourse(course, context.username, context.password)
+        data.deleteCourse(course.id, authenticatedUser.emailAddress, password)
             .then(errors => {
                 if (errors.length) {
                     console.log('Something went wrong!', errors);
@@ -45,11 +51,11 @@ const CourseDetail = () => {
     <main>
         <div className="actions--bar">
             <div className="wrap">
-                {/* Checks if current authenticated user is the owner of fetched course */}
-                {course.userId === userId? (
+                {/* Checks if current authenticated user is the owner of the fetched course */}
+                {(authenticatedUser && authenticatedUser.id === course.userId)? (
                     <React.Fragment>
                         <Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-                        <Link className="button" to='/' onClick={deleteCourse}>Delete Course</Link>
+                        <Link className="button" to="#" onClick={deleteCourse}>Delete Course</Link>
                     </React.Fragment>
                 ) : null}
                 <Link className="button button-secondary" to="/">Return to List</Link>
@@ -79,4 +85,3 @@ const CourseDetail = () => {
 }
 
 export default CourseDetail;
-// <ul className="course--detail--list">

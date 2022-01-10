@@ -4,15 +4,17 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 export default function UserSignIn () {
-    // Initialize hooks and variables to be kept in state
+    // Initializes hooks and retrieves data from context
+    const {actions} = useContext(Context);
     let navigate = useNavigate();
     let location = useLocation();
-    const context = useContext(Context);
-
+    
+    // Variables to be kept in state
     const [emailAddress, setEmail] = useState('');
     const [password, setPass] = useState('');
     const [errors, setErrors] = useState([]);
 
+    // Captures user input
     const change = (event) => {
         const value = event.target.value;
         switch (event.target.name) {
@@ -27,21 +29,22 @@ export default function UserSignIn () {
         }
     }
 
-    // Signin a user on submit
+    // Signs in a user on submit
     const submit = (event) => {
         event.preventDefault();
         const { from } = location.state || { from: { pathname: '/' } };
 
-        context.actions.signIn(emailAddress, password)
+        actions.signIn(emailAddress, password)
             .then(user => {
                 if (user === null) {
-                    setErrors(['Sign-in was unsuccessful']);
+                    setErrors(['Sign-in was unsuccessful. Please provide valid username and password.']);
                 } else {
                     navigate(from);
                 }
             })
             .catch((err) => {
-                console.log("Catch error:", err);
+                // catches all other errors and redirects to 'error' page
+                console.log(err);
                 navigate('/error');
             });
     }

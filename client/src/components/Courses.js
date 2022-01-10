@@ -3,19 +3,30 @@ import { Link, useNavigate } from 'react-router-dom';
 import {Context} from '../Context';
 
 const Courses = () => {
-    // Initialize hooks and variables to be kept in state
-    const context = useContext(Context);  
-    const [courses, setCourses] = useState([]);
+    // Initializes hooks and retrieves data from context
+    const {data} = useContext(Context);
     let navigate = useNavigate();
 
+    // Variable to be kept in state
+    const [courses, setCourses] = useState([]);
+    
+    // Retreives courses
     useEffect(() => {
-        context.data.getCourses()
-            .then(data => setCourses(data.courses))
+        data.getCourses()
+            .then(data => {
+                // if no data, redirects to 'notfound' page
+                if (!data) {
+                    navigate('/notfound');
+                } else {
+                    setCourses(data.courses);
+                }
+            })
             .catch(err => {
+                // catches all other errors and redirects to 'error' page
                 console.log('Error fetching data:', err);
                 navigate('/error');
             })
-    }, [context.data]);
+    }, [data, navigate]);
 
     return (
     <main>
@@ -28,7 +39,6 @@ const Courses = () => {
                     </Link>
                 )
             })}
-            
             <Link className="course--module course--add--module" to="/courses/create">
                 <span className="course--add--title">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"

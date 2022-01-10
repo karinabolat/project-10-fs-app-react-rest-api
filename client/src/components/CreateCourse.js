@@ -4,16 +4,18 @@ import {Context} from '../Context';
 import ErrorsDisplay from './ValidationErrors';
 
 const CreateCourse = () => {
-    // Initialize hooks and variables to be kept in state
+    // Initializes hooks and retrieves data from context
     let navigate = useNavigate();
-    const context = useContext(Context);
+    const {data, authenticatedUser, password} = useContext(Context);
 
+    // Variables to be kept in state
     const [title, setTitle] = useState('');
     const [description, setDesc] = useState('');
     const [estimatedTime, setTime] = useState('');
     const [materialsNeeded, setMaterials] = useState('');
     const [errors, setErrors] = useState([]);
 
+    // Captures user input
     const change = (event) => {
         const value = event.target.value;
         switch (event.target.name) {
@@ -34,12 +36,12 @@ const CreateCourse = () => {
         }
     }
 
+    // Creates a course upon submission
     const submit = (event) => {
         event.preventDefault();
-        const userId = context.authenticatedUser.id;
-        const course = {title, description, estimatedTime, materialsNeeded, userId};
+        const course = {title, description, estimatedTime, materialsNeeded, userId: authenticatedUser.id};
 
-        context.data.createCourse(course, context.username, context.password)
+        data.createCourse(course, authenticatedUser.emailAddress, password)
             .then(errors => {
                 if (errors.length) {
                     setErrors(errors);
@@ -69,7 +71,7 @@ const CreateCourse = () => {
                             <label htmlFor="courseTitle">Course Title</label>
                             <input id="courseTitle" name="courseTitle" type="text" onChange={change} />
 
-                            <p>By {context.authenticatedUser.firstName} {context.authenticatedUser.lastName}</p>
+                            <p>By {authenticatedUser.firstName} {authenticatedUser.lastName}</p>
 
                             <label htmlFor="courseDescription">Course Description</label>
                             <textarea id="courseDescription" name="courseDescription" onChange={change} />

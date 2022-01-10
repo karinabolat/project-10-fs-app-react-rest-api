@@ -5,7 +5,7 @@ import {
   Routes
 } from 'react-router-dom';
 
-// Import components
+// Imports components
 import Header from './components/Header';
 import Courses from './components/Courses';
 import CourseDetail from './components/CourseDetail';

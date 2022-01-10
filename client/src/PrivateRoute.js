@@ -6,7 +6,7 @@ import {Context} from './Context';
 const PrivateRoute = ({ children }) => {
   const context = useContext(Context);
   const location = useLocation();
-  return context.authenticatedUser ? children : <Navigate to="/forbidden" state={{from : location}} />;
+  return context.authenticatedUser ? children : <Navigate to="/signin" state={{from : location}} />;
 };
 
 export default PrivateRoute;

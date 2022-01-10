@@ -1,5 +1,5 @@
 export default class Data {
-  // Method to fetch API
+  // Function to fetch API
   api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
     const url = 'http://localhost:5000/api' + path;
   
@@ -21,9 +21,7 @@ export default class Data {
     return fetch(url, options);
   }
 
-  // Methods to manipulate data from database
-
-  // To get a user during signin
+  // Fetches a user during signin
   async getUser(username, password) {
     const response = await this.api(`/users`, 'GET', null, true, { username, password });
     if (response.status === 200) {
@@ -37,7 +35,7 @@ export default class Data {
     }
   }
   
-  // To create a user during signup
+  // Creates a user during signup
   async createUser(user) {
     const response = await this.api('/users', 'POST', user);
     if (response.status === 201) {
@@ -53,7 +51,7 @@ export default class Data {
     }
   }
 
-  // To retrieve all courses
+  // Retrieves all courses
   async getCourses() {
     const response = await this.api(`/courses`, 'GET');
     if (response.status === 200) {
@@ -67,7 +65,7 @@ export default class Data {
     }
   }
 
-   // To retrieve a course
+   // Retrieves a course
   async getACourse(id) {
     const response = await this.api(`/courses/${id}`, 'GET');
     if (response.status === 200) {
@@ -83,7 +81,7 @@ export default class Data {
     }
   }
 
-  // To create a course
+  // Creates a course
   async createCourse(course, username, password) {
     const response = await this.api('/courses', 'POST', course, true, {username, password});
     if (response.status === 201) {
@@ -99,7 +97,7 @@ export default class Data {
     }
   }
 
-  // To update a course
+  // Updates a course
   async updateCourse(course, username, password) {
     const response = await this.api(`/courses/${course.id}`, 'PUT', course, true, {username, password});
     if (response.status === 204) {
@@ -115,9 +113,9 @@ export default class Data {
     }
   }
 
-  // To delete a course
-  async deleteCourse(course, username, password) {
-    const response = await this.api(`/courses/${course.id}`, 'DELETE', null, true, {username, password});
+  // Deletes a course
+  async deleteCourse(id, username, password) {
+    const response = await this.api(`/courses/${id}`, 'DELETE', null, true, {username, password});
     if (response.status === 204) {
       return [];
     }
